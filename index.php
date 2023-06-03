@@ -1,10 +1,10 @@
 <?php
 session_start();
-include("db.php");
+require_once('db_connect.php'); // Assuming you have a separate file for database connection
 
 function redirect($url) {
-    echo "<script>document.location='{$url}';</script>";
-    die;
+    header("Location: " . $url);
+    die();
 }
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
@@ -25,20 +25,25 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
                 if (password_verify($inputPassword, $hashedPassword)) {
                     $_SESSION['user_id'] = $user['id'];
+
                     if ($user['user_type'] === 'student') {
                         redirect('view.php');
                     } elseif ($user['user_type'] === 'instructor') {
                         redirect('dash.php');
                     }
+                } else {
+                    echo "Invalid username or password.";
                 }
+            } else {
+                echo "Invalid username or password.";
             }
-            echo "<script>alert('Invalid username or password.');</script>";
+
+            $loginStmt->close();
         } else {
-            echo "<script>alert('Please provide both username and password.');</script>";
+            echo "Please enter both username and password.";
         }
-        $loginStmt->close();
     } else {
-        echo "<script>alert('Please provide both username and password.');</script>";
+        echo "Username and password not provided.";
     }
 }
 ?>
