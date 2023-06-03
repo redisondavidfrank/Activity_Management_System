@@ -3,8 +3,10 @@ session_start();
 require_once('db_connect.php'); // Assuming you have a separate file for database connection
 
 function redirect($url) {
-    header("Location: " . $url);
-    die();
+    $url = "http://example.com/new-page.php"; // Replace with your desired URL
+
+	header("Location: $url");
+	exit();
 }
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
